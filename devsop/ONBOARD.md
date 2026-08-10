@@ -163,9 +163,9 @@ Tier: [1 - Developer | 2 - Supervisor/Lead | 3 - CTO/Security]
 
 ---
 
-## Approach
+## Where I Would Start
 
-[2-4 sentences maximum. How you would approach this project based on what the audit found. Not a summary of findings. A statement of sequencing: what matters most, what depends on what, and what the overall shape of the work is. Written as "Here is how I would approach this" from the LLM's perspective.]
+[2-4 sentences maximum. Written from the LLM's perspective. How you would sequence the work based on what the audit found. Not a summary of findings. A statement of what matters most, what depends on what, and what the shape of the work is.]
 
 ## Escalate
 
@@ -175,7 +175,7 @@ Tier: [1 - Developer | 2 - Supervisor/Lead | 3 - CTO/Security]
 
 ## Do Now
 
-[Maximum 6 items. The highest-impact tasks that can be started immediately. When these are done, the next batch gets added. Each item is one sentence with a file path.]
+[Immediate action items. Group by dependency: tasks that must complete before others come first, followed by tasks that unlock once the first group is done. Order within each group is priority order. Keep the total list under 15 items. If the audit produced more than 15 actionable findings, include the top 15 and pull the rest in as items are completed.]
 
 - [ ] [Task] -- [file path or area]
 - [ ] [Task] -- [file path or area]
@@ -203,11 +203,12 @@ Done when: [testable outcome]
 
 ### Rules for the TODO
 
-- Maximum 6 items in Do Now. Not 7. Not 10. Six. When completed tasks free up slots, pull the next highest-priority items from the audit findings to fill them. This keeps the list scannable and prevents overwhelm.
+- Keep the total Do Now list under 15 items. If the audit produced more actionable findings, include the highest-priority 15 and pull the rest in as items are completed.
+- Group items by dependency. Tasks that block other tasks come first. Tasks that can only begin after the first group is done come after. Within each group, order by priority.
 - Do not include Flagged or informational items. Those live in the audit report.
-- Do not include priority sub-categories (Critical, High, Normal). The ordering of the list IS the priority. First item is most important. Last item is least.
+- Do not include priority sub-categories (Critical, High, Normal). The ordering and grouping of the list IS the priority.
 - Do not include a session log. Session history goes in AUDIT-REPORT.md.
-- The Approach section is written once on first generation. On subsequent runs, update it only if the project's situation has materially changed.
+- The "Where I Would Start" section is written once on first generation. On subsequent runs, update it only if the project's situation has materially changed.
 
 ---
 
@@ -218,7 +219,7 @@ When the user returns and says anything like "I finished that task," "what is ne
 1. Read `TODO-devsop.md` from this folder.
 2. Check the codebase for evidence of completed work. Mark done tasks as completed with the date.
 3. After marking completions, re-check areas affected by the completed work. Fixing one thing can reveal new issues.
-4. If completed tasks freed up slots in Do Now (under 6 items), pull the next highest-priority items from the audit findings.
+4. If completed tasks brought the list well below 15 items, pull the next highest-priority findings from the audit report to refill.
 5. Update the Start Here section to point to the new first task.
 6. Present the updated Start Here to the user.
 

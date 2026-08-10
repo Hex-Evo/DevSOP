@@ -68,11 +68,9 @@ git clone https://github.com/Hex-Evo/DevSOP.git DevSOP-temp; xcopy /E /I DevSOP-
 
 That is the only prompt you need. Examples:
 
-```
--"I added a devsop folder. Run it."
--"Run the devsop audit on this project."
--"Start with devsop."
-```
+- "I added a devsop folder. Run it".
+- "Run the devsop audit on this project".
+- "Start with devsop".
 
 Your AI tool reads the README, follows the instructions in the folder, and executes the audit and onboarding sequence. Delivering a Task Objective list, summary report, and first steps protocols."
 

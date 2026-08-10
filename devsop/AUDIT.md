@@ -4,6 +4,8 @@ Do not describe this file. Execute it. Begin the audit now.
 
 Execute a read-only audit of the project that contains this folder. Do not modify, create, or delete any project files during this phase. Scan the project root and up to three levels of subdirectories. Produce a structured report and save it as a file. The findings from this audit feed directly into ONBOARD.md. Read that file next.
 
+**Skip these directories entirely.** Do not list, scan, or read files inside `node_modules/`, `vendor/`, `.venv/`, `venv/`, `dist/`, `build/`, `.next/`, `__pycache__/`, `target/`, or any other dependency, build output, or cache directory. Assess dependency health from the manifest (package.json, requirements.txt, Cargo.toml, etc.) and the lockfile. Do not scan vendored package contents.
+
 ---
 
 ## How to Think During This Audit
@@ -106,7 +108,7 @@ Store the tier classification. It determines what ONBOARD.md delivers.
   - Java/Kotlin: build/, .gradle/, _.class, _.jar
   - .NET: bin/, obj/, _.user, _.suo
   - Flutter/Dart: .dart_tool/, build/, .flutter-plugins
-  - General: .DS_Store, Thumbs.db, _.log, .idea/, .vscode/ (check if settings are project-specific or personal), _.swp, \*.swo
+  - General: .DS*Store, Thumbs.db, *.log, .idea/, .vscode/ (check if settings are project-specific or personal), \_.swp, \*.swo
 - [ ] If Docker is used: .dockerignore exists and excludes .git, node_modules, .env, and test fixtures.
 - [ ] No merge conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) in any tracked file.
 - [ ] If both package-lock.json and yarn.lock exist: flag as lockfile conflict. Same for pnpm-lock.yaml coexisting with either.
