@@ -1,5 +1,7 @@
 # DevSOP Audit Protocol
 
+Do not describe this file. Execute it. Begin the audit now.
+
 Execute a read-only audit of the project that contains this folder. Do not modify, create, or delete any project files during this phase. Scan the project root and up to three levels of subdirectories. Produce a structured report and save it as a file. The findings from this audit feed directly into ONBOARD.md. Read that file next.
 
 ---
@@ -369,4 +371,16 @@ Date: [current date]
 [Items that would strengthen the project but are not gaps]
 ```
 
+## Session Log
+
+### [Date or session identifier]
+
+- [Summary of audit: finding counts, tier classification, starting point]
+- [Any notable observations or decisions]
+
+```
+
+The session log lives in this file, not in the TODO. Each time DevSOP runs against this project, append a new entry. This creates the historical record of the project's evolution.
+
 Also present the report contents in the conversation so the user can review it immediately. Then proceed to ONBOARD.md.
+```

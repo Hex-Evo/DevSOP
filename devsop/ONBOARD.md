@@ -144,96 +144,91 @@ Next: [what task comes after this one, by reference to the action list]
 
 ---
 
-## Phase 3: Generate the Task List
+## Phase 3: Generate the TODO
 
-Create `TODO-devsop.md` in this devsop/ folder.
+Create `TODO-devsop.md` in this devsop/ folder. This file is the SOP. It is the only file the developer works from day to day. It must be short, clear, and immediately actionable.
 
-If `TODO-devsop.md` already exists, **read it first**. Compare existing tasks against your current analysis:
+All flags, informational findings, priority classifications, and session history belong in `AUDIT-REPORT.md`. Do not duplicate them in the TODO. The TODO is a punch list, not a report.
 
-- Mark completed tasks based on evidence in the codebase (if a task said "add .gitignore" and .gitignore now exists, mark it done)
-- Add new tasks discovered in this session
-- Update priorities if the project state has changed
-- Preserve any tasks the user manually added or annotated
+If `TODO-devsop.md` already exists, read it first. Mark completed tasks based on evidence in the codebase. Add new tasks only if the total incomplete items stay under the limits below.
 
-### Task List Format
-
-Save as a markdown file. This file can be printed, emailed, or shared with anyone who needs visibility into the project's state and priorities.
+### TODO Format
 
 ```markdown
 # TODO - DevSOP
 
-Project: [project name from package.json, README, or folder name]
+Project: [project name]
 Last updated: [current date]
 Tier: [1 - Developer | 2 - Supervisor/Lead | 3 - CTO/Security]
 
 ---
 
-## Escalate (requires higher-tier attention)
+## Approach
 
-- [ ] [Finding description] -- [file path or area]
+[2-4 sentences maximum. How you would approach this project based on what the audit found. Not a summary of findings. A statement of sequencing: what matters most, what depends on what, and what the overall shape of the work is. Written as "Here is how I would approach this" from the LLM's perspective.]
 
-## Action
+## Escalate
 
-### Critical
+[1-2 items maximum. Only findings that require someone at a higher tier to make a decision. If the project is Tier 3 or nothing needs escalation, omit this section entirely.]
 
-- [ ] [Task description] -- [file path or area]
+- [ ] [What needs deciding] -- [where]
 
-### High Priority
+## Do Now
 
-- [ ] [Task description] -- [file path or area]
+[Maximum 6 items. The highest-impact tasks that can be started immediately. When these are done, the next batch gets added. Each item is one sentence with a file path.]
 
-### Normal Priority
+- [ ] [Task] -- [file path or area]
+- [ ] [Task] -- [file path or area]
 
-- [ ] [Task description] -- [file path or area]
+## Start Here
 
-## Flagged (informational)
+[Task name]
 
-- [Finding description] -- [file path or area]
+Why this first: [one sentence]
+
+Where: [file path(s)]
+
+What to do:
+
+1. [step]
+2. [step]
+3. [step]
+
+Done when: [testable outcome]
 
 ## Completed
 
-- [x] [Task description] -- [completed date or session]
-
----
-
-## Session Log
-
-### [Date or session identifier]
-
-- Audit completed. [X] findings across [Y] categories.
-- Tier classification: [tier and basis].
-- [Z] escalations, [N] action items, [M] flags.
-- Starting point: [task name].
+- [x] [Task] -- [date]
 ```
+
+### Rules for the TODO
+
+- Maximum 6 items in Do Now. Not 7. Not 10. Six. When completed tasks free up slots, pull the next highest-priority items from the audit findings to fill them. This keeps the list scannable and prevents overwhelm.
+- Do not include Flagged or informational items. Those live in the audit report.
+- Do not include priority sub-categories (Critical, High, Normal). The ordering of the list IS the priority. First item is most important. Last item is least.
+- Do not include a session log. Session history goes in AUDIT-REPORT.md.
+- The Approach section is written once on first generation. On subsequent runs, update it only if the project's situation has materially changed.
 
 ---
 
 ## Task Continuation
 
-When the user returns and says anything like:
+When the user returns and says anything like "I finished that task," "what is next," "continue," or "update the list":
 
-- "I finished that task. What is next?"
-- "What is left?"
-- "Continue from where we left off."
-- "Update the task list."
-- "Run devsop again."
+1. Read `TODO-devsop.md` from this folder.
+2. Check the codebase for evidence of completed work. Mark done tasks as completed with the date.
+3. After marking completions, re-check areas affected by the completed work. Fixing one thing can reveal new issues.
+4. If completed tasks freed up slots in Do Now (under 6 items), pull the next highest-priority items from the audit findings.
+5. Update the Start Here section to point to the new first task.
+6. Present the updated Start Here to the user.
 
-Read `TODO-devsop.md` from this folder. Check the codebase for evidence of completed work. Update the file.
-
-**After marking tasks complete, check for new findings.** Completing one task can reveal issues that were not visible before. Fixing the .gitignore may reveal that previously-ignored files were already committed to history. Adding tests may uncover untested code paths with bugs. Resolving a dependency conflict may surface version incompatibilities downstream. Run a targeted re-check of areas directly affected by the completed work before presenting the next task.
-
-Present the next highest-priority incomplete ACTION task using the Start Here format from Section 3.
-
-If the user says "run devsop again" or "rerun the audit," go back to AUDIT.md and execute a fresh audit. Compare new findings against the existing task list. Update accordingly.
-
-If the project has changed significantly since the last session (new directories, new dependencies, major refactoring), note what changed in the session log before updating tasks.
+If the user says "run devsop again" or "rerun the audit," go back to AUDIT.md and execute a fresh audit. Compare new findings against the existing TODO. Update both files.
 
 ---
 
 ## Output Rules
 
-- Produce all three sections (What Is This, Findings by Category, Start Here) in a single response unless the project is large enough that the output would exceed practical length. In that case, produce Section 1 and Section 2, then ask if the user wants the full Start Here breakdown or a summary.
-- Do not over-scope. A Tier 1 developer does not need the full security surface analysis. A Tier 3 CTO does not need to know which React component is missing a prop type. The tier controls the lens.
-- If the project is well-structured with no critical issues, say so. Do not invent problems to fill a template.
-- The task list file (`TODO-devsop.md`) is always generated. It is the persistent artifact.
-- The audit report file (`AUDIT-REPORT.md`) was generated in the previous phase. Together, these two files are the complete DevSOP deliverable for this project. Both are shareable, printable, and portable.
+- Produce all three sections (What Is This, Findings by Category, Start Here) in a single response unless the project is too large. In that case, produce Section 1 and 2, then ask if the user wants the full breakdown.
+- Do not over-scope. The tier controls the lens. A Tier 1 developer does not need the security surface. A Tier 3 CTO does not need component-level findings.
+- If the project is well-structured with no critical issues, say so. Do not invent problems.
+- The TODO file is always generated. The audit report was generated in the previous phase. Together they are the complete DevSOP deliverable. Both are printable and portable.
