@@ -46,6 +46,24 @@ your-project/
   ...
 ```
 
+### Option 1.1: Download and copy (any OS, no tools needed)
+
+1. Go to [github.com/Hex-Evo/DevSOP](https://github.com/Hex-Evo/DevSOP)
+2. Click the green **Code** button, then **Download ZIP**
+3. Extract the ZIP and copy the `devsop/` folder into your project root
+
+### Option 1.2: Git CLI (Mac/Linux)
+
+git clone https://github.com/Hex-Evo/DevSOP.git
+cp -r DevSOP/devsop/ ./your-project/devsop/
+rm -rf DevSOP
+
+### Option 1.3: Git CLI (Windows PowerShell)
+
+git clone https://github.com/Hex-Evo/DevSOP.git
+Copy-Item -Recurse DevSOP\devsop\ .\your-project\devsop
+Remove-Item -Recurse -Force DevSOP
+
 ### Step 2: Tell your AI tool to read it.
 
 That is the only prompt you need. Examples:
