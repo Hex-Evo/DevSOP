@@ -55,26 +55,24 @@ your-project/
 ### Option 1.2: Git CLI (Mac/Linux)
 
 ```
-git clone https://github.com/Hex-Evo/DevSOP.git
-cp -r DevSOP/devsop/ ./devsop/
-rm -rf DevSOP
+git clone https://github.com/Hex-Evo/DevSOP.git DevSOP-temp && cp -r DevSOP-temp/devsop/ ./devsop/ && rm -rf DevSOP-temp
 ```
 
 ### Option 1.3: Git CLI (Windows PowerShell)
 
 ```
-git clone https://github.com/Hex-Evo/DevSOP.git
-Copy-Item -Recurse DevSOP\devsop\ .\devsop
-Remove-Item -Recurse -Force DevSOP
+git clone https://github.com/Hex-Evo/DevSOP.git DevSOP-temp; xcopy /E /I DevSOP-temp\devsop devsop; Remove-Item -Recurse -Force DevSOP-temp
 ```
 
 ### Step 2: Tell your AI tool to read it.
 
 That is the only prompt you need. Examples:
 
+```
 -"I added a devsop folder. Run it."
 -"Run the devsop audit on this project."
 -"Start with devsop."
+```
 
 Your AI tool reads the README, follows the instructions in the folder, and executes the audit and onboarding sequence. Delivering a Task Objective list, summary report, and first steps protocols."
 
