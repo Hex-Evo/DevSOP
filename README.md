@@ -56,7 +56,7 @@ your-project/
 
 ```
 git clone https://github.com/Hex-Evo/DevSOP.git
-cp -r DevSOP/devsop/ ./your-project/devsop/
+cp -r DevSOP/devsop/ ./devsop/
 rm -rf DevSOP
 ```
 
@@ -64,7 +64,7 @@ rm -rf DevSOP
 
 ```
 git clone https://github.com/Hex-Evo/DevSOP.git
-Copy-Item -Recurse DevSOP\devsop\ .\your-project\devsop
+Copy-Item -Recurse DevSOP\devsop\ .\devsop
 Remove-Item -Recurse -Force DevSOP
 ```
 
