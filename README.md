@@ -2,7 +2,7 @@
 
 **An agent-agnostic governance framework that replaces the human handoff. Drop it into any project, and the next person who runs it through their LLM it generates their own SOP, task priorities, and starting point through whatever tool they already use.**
 
-# **Taking on the small task of making every other SOP system redundant.**
+### **Taking on the small task of making every other SOP system redundant.**
 
 ## What This Is
 
