@@ -1,114 +1,123 @@
 # DevSOP Onboarding Protocol
 
-You are executing the onboarding phase for the project that contains this folder. You should have already completed the audit (AUDIT.md). If you have not, go back and complete it first. The audit findings feed directly into the task list you generate here.
+You have completed the audit from AUDIT.md. Use the audit findings, project fingerprint, and tier classification to produce the onboarding deliverable. Do not re-run the audit. Do not ask the user to describe their project. Everything you need is in the audit output and the codebase you already scanned.
 
 ---
 
-## Phase 1: Project Classification
+## How to Present the Deliverable
 
-You already fingerprinted the project during the audit. Now classify it operationally. These classifications determine how you scope the onboarding, what you prioritize in the task list, and what level of detail you provide.
+**Start with the finding, not with yourself.** Do not open sections with "I see" or "Based on my analysis" or "Looking at the codebase." State what the project is, what the findings are, what the tasks are. The user does not need narration of your process. They need the output.
 
-### 1.1 Determine the Project Archetype
+**Be direct about the state of things.** If the project has serious gaps, say so in plain language. If the security posture is weak, say the security posture is weak. Softened language causes the reader to underweight severity. "There are some areas for improvement" is not useful. "No tests exist, no CI is configured, and credentials are tracked in git history" is useful.
 
-Read the project structure, dependencies, entry points, and any existing documentation. Classify into exactly one archetype:
+**Every finding must reference something specific.** A file, a configuration, a missing file, a pattern observed in the code. Generic advice ("consider adding tests") is not acceptable. Specific findings ("no test directory exists, no test runner is configured in package.json, and 47 source files have zero coverage") are acceptable.
 
-- **Greenfield scaffold:** Boilerplate or starter template with minimal custom code. The work ahead is building, not fixing.
-- **Active product:** Shipping or near-shipping software with users, deployments, or release history. The work is feature development, maintenance, and hardening.
-- **Internal tool:** Built for a team, not a market. Documentation expectations are lower but operational reliability matters.
-- **Library or package:** Consumed by other projects. API surface, versioning, and documentation are primary concerns.
-- **Prototype or proof-of-concept:** Experimental code. The work is deciding what to keep, what to rewrite, and what to throw away.
-- **Legacy rescue:** Old codebase being revived, migrated, or modernized. The work is understanding before changing.
-- **Infrastructure or platform:** DevOps, CI/CD, cloud config, or deployment automation. The work is reliability, security, and documentation.
-- **Monorepo with mixed concerns:** Contains multiple projects, packages, or services. Must be onboarded per-package, not as a whole.
+---
 
-### 1.2 Determine Scope Boundaries
+## Phase 1: Confirm Classification
 
-Not everything in the repository is this user's concern. Before generating output, identify scope limits:
+### 1.1 Project Tier
 
-- **Imports and exports:** If the project imports from external packages, those packages are dependencies, not part of the project. If the project exports modules consumed elsewhere, note the export surface but do not onboard to the consumers.
-- **Monorepo boundaries:** If this is a monorepo, identify which package or workspace the user is likely working in. Onboard to that scope. Mention the others as context, not as work items.
-- **Confidentiality markers:** If any files contain access control markers (role-based comments, permission tiers, classification labels, DO-NOT-MODIFY warnings), respect them. Do not surface restricted content in the onboarding output. Note that restricted areas exist without revealing their contents.
-- **Generated code:** If the project contains generated files (compiled output, auto-generated types, migration snapshots, build artifacts), exclude them from the task list. They are outputs, not work items.
-- **Third-party or vendor code:** If checked-in vendor code exists, it is not the user's code to modify. Exclude from tasks unless integration with it is required.
+The audit determined the project tier (1, 2, or 3). The tier controls what this file delivers:
 
-### 1.3 Infer the User's Role
+- **Tier 1 (Developer scope):** The deliverable is oriented toward a contributor who needs to understand the project and start building. Focus on: what this is, what the gaps are that affect their work, and where to start.
+- **Tier 2 (Supervisor/Lead scope):** The deliverable serves someone managing the project or evaluating what a developer built. Focus on: structural health, team-level risks, delegation priorities, and what needs sign-off.
+- **Tier 3 (CTO/Security scope):** The deliverable serves someone assessing organizational risk, compliance posture, or architectural fitness. Focus on: security surface, governance completeness, external exposure, and strategic gaps.
 
-You should determine the user's operational scope. Use the following signals:
+All tiers receive the full audit findings. The difference is how findings are categorized: what gets flagged for awareness, what gets escalated, and what becomes an action item.
 
-- **How they prompted you.** "Run devsop" with no other context suggests a lead or owner who wants the full picture. "I just joined this project" suggests a new contributor. "What is broken?" suggests a senior troubleshooter.
-- **What files they have open or recently edited.** Frontend components suggest a frontend developer. Infrastructure configs suggest a DevOps engineer. Everything suggests a lead or CTO.
-- **What questions they ask.** "How does this deploy?" suggests ops. "Where are the tests?" suggests QA or a senior dev. "What does this project do?" suggests someone new at any level.
+### 1.2 Scope Boundaries
 
-If you cannot determine role from available signals, ask one question: "What is your role on this project?" Use the answer to scope everything that follows.
+Before producing output, establish what is inside and outside this user's scope:
 
-Map to one of these operational scopes:
-
-- **Executive / CTO scope:** Architecture overview, risk surface, security posture, strategic gaps. No file-level task assignments. Focus on what decisions need to be made.
-- **Tech lead / senior scope:** Architecture + implementation detail. File-level awareness. Task list includes both technical debt and feature work. Focus on what to prioritize and delegate.
-- **Developer scope:** Implementation detail within their domain. Task list is specific: file paths, function names, what to build next. Focus on what to do and how to start.
-- **New contributor scope:** Orientation first. What the project does, how it is structured, how to set up a local environment, what conventions to follow. Task list is limited to starter tasks (good first issues, documentation improvements, test additions).
-- **QA / review scope:** Test coverage, quality gaps, known issues, areas of fragility. Task list focuses on what to test, what is untested, and where bugs are likely hiding.
-- **Security / compliance scope:** Full security audit findings, governance gaps, credential management, access control review, regulatory considerations. Task list focuses on hardening and compliance.
+- **Imports from external packages** are dependencies. Note them as context, not as work items.
+- **Exports consumed by other projects** define the boundary of this project's responsibility. Note the export surface but do not onboard to the consumers.
+- **Monorepo packages or workspaces** outside the user's likely working area are context, not scope. Mention their existence. Do not generate tasks for them unless the tier is 2 or 3.
+- **Confidentiality markers, access control labels, or DO-NOT-MODIFY flags** define hard boundaries. Do not surface restricted content. Note that restricted areas exist without revealing their contents.
+- **Generated code, vendor code, and build artifacts** are outputs, not work items. Exclude from task generation.
+- **External connections** (servers, databases, storage buckets, agents, APIs) identified in the audit are boundaries. Note what they connect to and whether credentials are properly managed. Do not scope into the external systems themselves.
 
 ---
 
 ## Phase 2: Produce the Onboarding Brief
 
-Generate three sections. Each section is scoped to the user's role as determined above. The depth and content of each section changes based on role.
-
 ### Section 1: What Is This Project?
 
-Produce a summary that answers these questions in natural prose, not as a checklist:
+Produce a summary in natural prose. Scope the depth to the tier:
 
-- What does this project do? (purpose, not technology)
-- Who is it for? (users, customers, internal team, other developers)
-- What is it built with? (language, framework, key dependencies -- only the ones that matter architecturally)
-- How is it structured? (major directories, entry points, data flow)
-- What is its current state? (actively maintained, stale, mid-migration, broken, shipping)
-- What are its boundaries? (what is in scope, what is external, what is upstream/downstream)
+**All tiers:**
 
-For executive scope: emphasize purpose, state, and risk. Skip implementation detail.
-For developer scope: emphasize structure, entry points, and conventions. Be specific about file paths.
-For new contributor scope: emphasize purpose, setup instructions, and where to find things. Assume nothing.
+- What the project does (purpose, not just technology)
+- What it is built with (language, framework, key architectural dependencies)
+- What its current state is (actively maintained, stale, mid-migration, broken, shipping)
+- What its boundaries are (what is in scope, what is external, what is upstream/downstream)
 
-### Section 2: What Are the Tasks?
+**Tier 1 add:**
 
-Compile a prioritized task list from three sources:
+- How the project is structured (directories, entry points, where a developer would spend most of their time)
+- How to set up and run it locally (if determinable from existing config and docs)
+- What conventions are in use (naming, formatting, patterns)
 
-**Source 1: Audit findings.**
-Every MISSING or NEEDS REVIEW item from the audit is a candidate task. Categorize by severity:
-- Critical (security risk, data exposure, broken build) = immediate
-- Structural (missing tests, no CI, undocumented architecture) = high priority
-- Improvement (better README, add CODEOWNERS, improve error handling) = normal priority
+**Tier 2 add:**
 
-**Source 2: Existing project signals.**
-Scan for:
-- TODO and FIXME comments in source files (extract the text, note the file and line)
-- Open issues (if .github/ or issue tracker references are present)
-- Incomplete implementations (stub functions, placeholder content, commented-out code blocks with notes)
-- Unused imports, dead code paths, or orphaned files (signals of abandoned work)
-- package.json scripts that exist but reference missing files or tools
+- Who is working on this and in what capacity (if determinable from git history, CODEOWNERS, or contributor patterns)
+- What the deployment looks like (environments, CI/CD, release process)
+- What areas are well-covered vs. fragile
 
-**Source 3: Codebase analysis.**
-Based on the project archetype and maturity:
-- Greenfield: tasks are about establishing foundations (testing, CI, documentation, structure)
-- Active product: tasks are about hardening, coverage gaps, and unfinished features
-- Legacy rescue: tasks are about understanding, documenting, and stabilizing before changing
-- Library: tasks are about API surface, documentation, versioning, and consumer experience
+**Tier 3 add:**
 
-For executive scope: tasks are strategic decisions, not implementation items. "Decide on testing strategy" not "write tests for auth.js."
-For developer scope: tasks are specific. File paths, function names, what the implementation should accomplish.
-For new contributor scope: tasks are safe, bounded, and educational. No tasks that could break production.
+- Full security surface summary (from audit auth patterns and external connections)
+- Compliance or regulatory signals (if any)
+- Architectural risk areas (single points of failure, undocumented integrations, missing governance)
 
-### Section 3: Where Do You Start?
+### Section 2: Findings by Category
 
-This is the single most actionable output. Identify ONE task from the list above that meets all of these criteria:
+Take every finding from the audit report and categorize it into one of three groups.
 
-- Highest impact relative to effort
-- Does not depend on completing another task first
-- Is within the user's inferred scope
-- Produces a visible, testable result when completed
-- Does not require decisions from someone else (unless the user is the decision-maker)
+**Categorization rules:**
+
+**ESCALATE** -- This finding is above the current tier's authority or expertise. It requires attention from a higher tier.
+
+- For Tier 1: security vulnerabilities, exposed credentials, missing auth on sensitive endpoints, architecture decisions, compliance gaps, hallucinated content in critical paths
+- For Tier 2: findings that require organizational policy decisions, legal/compliance review, or infrastructure changes outside this project's scope
+- For Tier 3: nothing escalates from Tier 3 (this is the top tier within DevSOP's scope)
+
+**FLAG** -- This finding is informational. It is worth knowing but does not require immediate action from this user.
+
+- Recommendations from the audit that would improve but are not blocking
+- Patterns that are unusual but not dangerous
+- Historical artifacts (old LLM attribution lines, legacy code patterns) that are cosmetic, not functional
+- External dependency deprecation warnings where alternatives exist but migration is not urgent
+
+**ACTION** -- This finding requires work from this user at this tier. It becomes a task.
+
+- For Tier 1: gaps that directly affect the developer's ability to build (missing setup docs, broken build, missing .env.example, failing tests, unresolved merge conflicts, dependency issues)
+- For Tier 2: gaps in team process (missing CI, missing test coverage, undocumented architecture, inconsistent patterns, delegation items from Tier 1 escalations)
+- For Tier 3: gaps in security, governance, and compliance (exposed secrets, auth mismatches, missing audit logging, public repo exposure issues, unverified LLM artifacts in critical systems)
+
+Present findings grouped by category:
+
+```
+## Findings
+
+### Escalate
+- [Finding] -- [file path or area] -- [why this needs escalation]
+
+### Flag
+- [Finding] -- [file path or area] -- [context]
+
+### Action
+- [Finding] -- [file path or area] -- [what needs to happen]
+```
+
+### Section 3: Start Here
+
+From the ACTION items, identify the single highest-impact starting point. Select using these criteria in order:
+
+1. **Lowest barrier to entry.** The task can be started immediately with no dependencies, no decisions from someone else, and no research required. If two tasks are equal in impact, the one that requires less setup comes first.
+2. **Highest impact relative to effort.** The result of completing this task visibly improves the project.
+3. **Within the user's tier scope.** A Tier 1 developer does not start with architecture decisions. A Tier 3 CTO does not start with a missing .env.example.
+4. **Produces a visible, testable result.** When done, something exists, passes, runs, or changes that did not before.
 
 Present it as:
 
@@ -117,24 +126,28 @@ Present it as:
 
 [Task name]
 
-Why this first: [one sentence explaining why this is the highest-leverage starting point]
+Why this first: [one sentence explaining why this is the highest-leverage starting point with the lowest barrier to entry]
 
 Where: [file path(s) or area of the codebase]
 
-What to do: [2-5 concrete steps, specific enough to act on without further research]
+What to do:
+1. [concrete step]
+2. [concrete step]
+3. [concrete step]
 
-When you are done: [what "done" looks like -- a test passing, a file existing, a behavior changing]
+Done when: [what "done" looks like: a test passing, a file existing, a behavior changing]
 
-Then: [what task comes next, by reference to the task list]
+Next: [what task comes after this one, by reference to the action list]
 ```
 
 ---
 
-## Phase 3: Generate the Task List File
+## Phase 3: Generate the Task List
 
-Create a file called `DEVSOP-TASKS.md` in the **parent project root** (one level up from this devsop/ folder). Not inside this folder.
+Create `TODO-devsop.md` in this devsop/ folder.
 
-If `DEVSOP-TASKS.md` already exists in the project root, **read it first**. Compare existing tasks against your current analysis:
+If `TODO-devsop.md` already exists, **read it first**. Compare existing tasks against your current analysis:
+
 - Mark completed tasks based on evidence in the codebase (if a task said "add .gitignore" and .gitignore now exists, mark it done)
 - Add new tasks discovered in this session
 - Update priorities if the project state has changed
@@ -142,64 +155,83 @@ If `DEVSOP-TASKS.md` already exists in the project root, **read it first**. Comp
 
 ### Task List Format
 
+Save as a markdown file. This file can be printed, emailed, or shared with anyone who needs visibility into the project's state and priorities.
+
 ```markdown
-# DevSOP Task List
+# TODO - DevSOP
 
 Project: [project name from package.json, README, or folder name]
 Last updated: [current date]
-Archetype: [detected archetype]
-Scope: [user's role scope]
+Tier: [1 - Developer | 2 - Supervisor/Lead | 3 - CTO/Security]
 
 ---
 
-## Critical (act now)
+## Escalate (requires higher-tier attention)
 
-- [ ] [Task description] -- [file path or area] -- [source: audit/TODO/analysis]
-- [ ] ...
+- [ ] [Finding description] -- [file path or area]
 
-## High Priority
+## Action
 
-- [ ] [Task description] -- [file path or area] -- [source: audit/TODO/analysis]
-- [ ] ...
+### Critical
 
-## Normal Priority
+- [ ] [Task description] -- [file path or area]
 
-- [ ] [Task description] -- [file path or area] -- [source: audit/TODO/analysis]
-- [ ] ...
+### High Priority
+
+- [ ] [Task description] -- [file path or area]
+
+### Normal Priority
+
+- [ ] [Task description] -- [file path or area]
+
+## Flagged (informational)
+
+- [Finding description] -- [file path or area]
 
 ## Completed
 
 - [x] [Task description] -- [completed date or session]
-- [x] ...
 
 ---
 
 ## Session Log
 
 ### [Date or session identifier]
+
 - Audit completed. [X] findings across [Y] categories.
-- [Z] critical issues identified.
+- Tier classification: [tier and basis].
+- [Z] escalations, [N] action items, [M] flags.
 - Starting point: [task name].
 ```
 
-### Continuation Protocol
+---
 
-When the user returns in a future session and says anything like:
+## Task Continuation
+
+When the user returns and says anything like:
+
 - "I finished that task. What is next?"
 - "What is left?"
 - "Continue from where we left off."
 - "Update the task list."
+- "Run devsop again."
 
-Read `DEVSOP-TASKS.md` from the project root. Check the codebase for evidence of completed work. Update the file. Present the next highest-priority incomplete task using the Start Here format from Section 3.
+Read `TODO-devsop.md` from this folder. Check the codebase for evidence of completed work. Update the file.
 
-If the project has changed significantly since the last session (new directories, new dependencies, major refactoring), re-run the relevant audit checks from AUDIT.md before updating tasks. Note what changed in the session log.
+**After marking tasks complete, check for new findings.** Completing one task can reveal issues that were not visible before. Fixing the .gitignore may reveal that previously-ignored files were already committed to history. Adding tests may uncover untested code paths with bugs. Resolving a dependency conflict may surface version incompatibilities downstream. Run a targeted re-check of areas directly affected by the completed work before presenting the next task.
+
+Present the next highest-priority incomplete ACTION task using the Start Here format from Section 3.
+
+If the user says "run devsop again" or "rerun the audit," go back to AUDIT.md and execute a fresh audit. Compare new findings against the existing task list. Update accordingly.
+
+If the project has changed significantly since the last session (new directories, new dependencies, major refactoring), note what changed in the session log before updating tasks.
 
 ---
 
 ## Output Rules
 
-- Produce all three sections (What Is This, What Are The Tasks, Where Do You Start) in a single response unless the project is large enough that the output would exceed practical length. In that case, produce Section 1, then ask if the user wants the full task list or a summary.
-- The task list file (`DEVSOP-TASKS.md`) is always generated. It is the persistent artifact of the onboarding.
-- Do not produce generic advice. Every finding, task, and recommendation must reference something specific in this project: a file, a configuration, a missing file, a pattern you observed.
-- Do not over-scope. A frontend developer does not need to know about the Kubernetes manifests unless they are broken. A CTO does not need to know which React component is missing a prop type.
-- If the project is genuinely well-structured with no critical issues, say so. Do not invent problems to fill a template.
+- Produce all three sections (What Is This, Findings by Category, Start Here) in a single response unless the project is large enough that the output would exceed practical length. In that case, produce Section 1 and Section 2, then ask if the user wants the full Start Here breakdown or a summary.
+- Do not over-scope. A Tier 1 developer does not need the full security surface analysis. A Tier 3 CTO does not need to know which React component is missing a prop type. The tier controls the lens.
+- If the project is well-structured with no critical issues, say so. Do not invent problems to fill a template.
+- The task list file (`TODO-devsop.md`) is always generated. It is the persistent artifact.
+- The audit report file (`AUDIT-REPORT.md`) was generated in the previous phase. Together, these two files are the complete DevSOP deliverable for this project. Both are shareable, printable, and portable.
