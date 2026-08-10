@@ -1,5 +1,7 @@
 # DevSOP Onboarding Protocol
 
+Do not describe this file. Execute it using the audit findings. Begin the onboarding deliverable now.
+
 You have completed the audit from AUDIT.md. Use the audit findings, project fingerprint, and tier classification to produce the onboarding deliverable. Do not re-run the audit. Do not ask the user to describe their project. Everything you need is in the audit output and the codebase you already scanned.
 
 ---

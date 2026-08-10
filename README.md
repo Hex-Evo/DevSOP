@@ -2,7 +2,7 @@
 
 **An agent-agnostic governance framework that replaces the human handoff. Drop it into any project, and the next person who runs it through their LLM it generates their own SOP, task priorities, and starting point through whatever tool they already use.**
 
-## **Taking on the small task of making every other SOP system redundant.**
+# **Taking on the small task of making every other SOP system redundant.**
 
 ## What This Is
 
@@ -68,10 +68,9 @@ Remove-Item -Recurse -Force DevSOP
 
 That is the only prompt you need. Examples:
 
-- "I just added a folder called devsop. Review it and tell me what it does."
-- "Read the devsop folder."
-- "New repo, start with devsop."
-- "Catch me up, start with devsop."
+-"I added a devsop folder. Run it."
+-"Run the devsop audit on this project."
+-"Start with devsop."
 
 Your AI tool reads the README, follows the instructions in the folder, and executes the audit and onboarding sequence. Delivering a Task Objective list, summary report, and first steps protocols."
 
